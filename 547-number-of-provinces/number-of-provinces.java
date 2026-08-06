@@ -13,12 +13,9 @@ class Solution {
     private void dfs(int node ,int[][] isConnected ,int[] vis) {
         vis[node] = 1;
         int n = isConnected.length;
-        int m = isConnected[0].length;
-        for(int i = 0;i<n;i++) {
-            for(int j  =0;j<m;j++) {
+        for(int j = 0;j<n;j++) {
                 if(isConnected[node][j] == 1 && vis[j] == 0) {
-                    dfs(j,isConnected,vis);
-                }
+                    dfs(j,isConnected,vis);  
             }
         }
 
