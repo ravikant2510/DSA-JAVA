@@ -1,23 +1,47 @@
 class Solution {
-    public int findCircleNum(int[][] isConnected) {
-        int count = 0;
-        int[] vis = new int[isConnected.length];
-        for(int i = 0;i<isConnected.length;i++) {
-            if(vis[i] == 0) {
-                count++;
-                dfs(i,isConnected,vis);
-            }
+    private int comp_count=0;
+    private int[] parent,rank;
+    int find_set(int v) {
+        if(parent[v] ==v) {
+            return v;
         }
-        return count;
+        return parent[v] = find_set(parent[v]);
     }
-    private void dfs(int node ,int[][] isConnected ,int[] vis) {
-        vis[node] = 1;
+    void union_set(int a, int b) {
+        a = find_set(a);
+        b = find_set(b);
+        if(a != b) {
+            if(rank[a] >rank[b]) {
+                parent[b] = a;
+            } else if(rank[a] <rank[b]){
+                parent[a] =b;
+            } else {
+                parent[a] = b;
+                rank[b]++;
+            }
+            comp_count--;
+        }
+    }
+    public int count() {
+        return comp_count;
+    }
+    public int findCircleNum(int[][] isConnected) {
         int n = isConnected.length;
-        for(int j = 0;j<n;j++) {
-                if(isConnected[node][j] == 1 && vis[j] == 0) {
-                    dfs(j,isConnected,vis);  
+
+        this.parent = new int[n];
+        this.rank = new int[n];
+        this.comp_count = n;
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<n;j++) {
+                if(isConnected[i][j] ==1) {
+                    union_set(i,j);
+                }
             }
         }
-
+        return count();
     }
 }
